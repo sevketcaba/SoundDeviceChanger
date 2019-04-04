@@ -38,7 +38,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "D:\Development\Releases\SoundDeviceChagner\v{#MyAppVersion}\SoundDeviceChanger.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Development\Releases\SoundDeviceChagner\v{#MyAppVersion}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\Development\Releases\SoundDeviceChagner\v{#MyAppVersion}\*"; Excludes: "settings.ini"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs 
 Source: "D:\Development\Projects\SoundDeviceChanger\setup_prereq\vc_redist.x64.exe"; DestDir: "{app}\req"; 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
