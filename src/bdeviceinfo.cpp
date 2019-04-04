@@ -1,7 +1,7 @@
 #include "bdeviceinfo.h"
+#include "bsettings.h"
 
 #include <QFileInfo>
-#include <QSettings>
 
 BDeviceInfo::BDeviceInfo(QObject *parent) :
     QObject(parent)
@@ -11,6 +11,7 @@ BDeviceInfo::BDeviceInfo(QObject *parent) :
     connect(this, &BDeviceInfo::iconChanged, this, &BDeviceInfo::saveSettings);
     connect(this, &BDeviceInfo::isHiddenChanged, this, &BDeviceInfo::saveSettings);
     connect(this, &BDeviceInfo::idChanged, this, &BDeviceInfo::loadSettings);
+    connect(this, &BDeviceInfo::nameChanged, this, &BDeviceInfo::loadSettings);
 }
 
 bool BDeviceInfo::isActive() const
@@ -85,10 +86,10 @@ void BDeviceInfo::loadSettings()
 {
     if(mId.isEmpty())
         return;
-    QSettings tSettings;
-    bool tIsHidden = tSettings.value(QString("%1/is_hidden").arg(mId)).toBool();
+    BSettings tSettings;
+    bool tIsHidden = tSettings.value(QString("%1/is_hidden").arg(escStr(mName))).toBool();
     setIsHidden(tIsHidden);
-    QString tIcon = tSettings.value(QString("%1/icon").arg(mId)).toString();
+    QString tIcon = tSettings.value(QString("%1/icon").arg(escStr(mName))).toString();
     setIcon(tIcon);
 
 }
@@ -98,8 +99,13 @@ void BDeviceInfo::saveSettings()
     if(mId.isEmpty())
         return;
 
-    QSettings tSettings;
-    tSettings.setValue(QString("%1/is_hidden").arg(mId), mIsHidden);
-    tSettings.setValue(QString("%1/icon").arg(mId), mIcon);
+    BSettings tSettings;
+    tSettings.setValue(QString("%1/is_hidden").arg(escStr(mName)), mIsHidden);
+    tSettings.setValue(QString("%1/icon").arg(escStr(mName)), mIcon);
     tSettings.sync();
+}
+
+QString BDeviceInfo::escStr(QString pStr)
+{
+    return pStr.replace('/', '_').replace(' ', '_').replace('(', '_').replace(')', '_').replace('-', '_');
 }

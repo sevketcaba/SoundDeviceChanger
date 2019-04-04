@@ -43,6 +43,8 @@ protected:
     QString mName;
     QString mIcon;
     bool mIsHidden;
+
+    QString escStr(QString pStr);
 };
 
 

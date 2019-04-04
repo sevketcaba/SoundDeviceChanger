@@ -15,6 +15,11 @@ Rectangle {
 
     property string customText: txtEdit.text
 
+    function show()  {
+        txtEdit.text = ""
+        opacity = 1
+    }
+
     Rectangle {
         id: rectCustom
         anchors.left: parent.left
@@ -24,6 +29,8 @@ Rectangle {
         clip: true
         anchors.margins: 1
         color: "black"
+        opacity: busyRect.visible ? .4 : 1
+        enabled: !busyRect.visible
 
         Rectangle {
             id: btnBack
@@ -53,7 +60,7 @@ Rectangle {
         Rectangle {
             id: searchRect
             anchors.top: parent.top
-            anchors.right: btnSend.left
+            anchors.right: btnDownload.left
             anchors.bottom: parent.bottom
             anchors.left: btnBack.right
             clip: true
@@ -71,6 +78,33 @@ Rectangle {
                 color: "white"
                 font.family: "FontAwesome"
                 font.pointSize: 14
+            }
+        }
+        Rectangle {
+            id: btnDownload
+            anchors.top: parent.top
+            anchors.right: btnSend.left
+            anchors.bottom: parent.bottom
+            width: height
+            clip: true
+            anchors.margins: 1
+            color: "black"
+            TextEdit {
+                text: "\uf0ed"
+                anchors.fill: parent
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                color: maDownload.containsMouse ? "white" : "silver"
+                font.family: "FontAwesome"
+                font.pointSize: 18
+            }
+            MouseArea {
+                id: maDownload
+                hoverEnabled: true
+                anchors.fill: parent
+                onClicked: {
+                    fontDatabase.reload()
+                }
             }
         }
         Rectangle {
@@ -113,6 +147,8 @@ Rectangle {
         clip: true
         anchors.margins: 1
         color: "black"
+        opacity: busyRect.visible ? .4 : 1
+        enabled: !busyRect.visible
 
         ListView {
             anchors.fill: parent
@@ -275,27 +311,36 @@ Rectangle {
 //        }
     }
 
-//    Rectangle {
-//        id: btnBack
-//        anchors.left: parent.left
-//        anchors.right: parent.right
-//        anchors.bottom: parent.bottom
-//        height: 15*Screen.pixelDensity
-//        clip: true
-//        anchors.margins: 1
-//        color: "black"
-//        Text {
-//            text: "\uf0e2"
-//            anchors.fill: parent
-//            horizontalAlignment: Qt.AlignHCenter
-//            verticalAlignment: Qt.AlignVCenter
-//            color: "white"
-//            font.family: "FontAwesome"
-//            font.pointSize: 14
-//        }
-//        MouseArea {
-//            anchors.fill: parent
-//            onClicked: iconSelector.iconSelectionCanceled()
-//        }
-//    }
+    Rectangle {
+        id: busyRect
+        anchors.centerIn: parent
+        width: 400
+        height: 80
+        visible: fontDatabase.busyMessage.length > 0
+        color: "black"
+        border.width: 1
+        border.color: "white"
+
+        BusyIndicator {
+            id: busyInd
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: height
+            anchors.margins: 10
+        }
+
+        Text {
+            anchors.left: busyInd.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            font.pointSize: 18
+            font.family: "FontAwesome"
+            color: "white"
+            text: fontDatabase.busyMessage
+        }
+    }
 }

@@ -19,16 +19,21 @@ QQmlListProperty<BFontData> BDatabaseLoader::fontData()
     return QQmlListProperty<BFontData>(this, mFontData);
 }
 
+QString BDatabaseLoader::busyMessage()
+{
+    return mBusyMessage;
+}
+
 void BDatabaseLoader::reload()
 {
-    qDebug() << "Reload";
+    setBusyMessage("Reloading");
     mDownload = true;
     download();
 }
 
 void BDatabaseLoader::save(const QString &pHtml)
 {
-    qDebug() << "Save";
+    setBusyMessage("Saving");
     int tIndex = pHtml.indexOf("<div class=\"row\">");
     int tIndex2 = pHtml.indexOf("<footer");
     QString tHtml = pHtml.mid(tIndex, tIndex2-tIndex).trimmed();
@@ -40,9 +45,17 @@ void BDatabaseLoader::save(const QString &pHtml)
     tFile.close();
 }
 
+void BDatabaseLoader::setBusyMessage(QString pBusyMessage)
+{
+    if(mBusyMessage == pBusyMessage)
+        return;
+    mBusyMessage = pBusyMessage;
+    emit busyMessageChanged();
+}
+
 void BDatabaseLoader::load()
 {
-    qDebug() << "Load";
+    setBusyMessage("Loading");
     while(mFontData.size())
     {
         BFontData *tData = mFontData.takeFirst();
@@ -104,11 +117,12 @@ void BDatabaseLoader::load()
     }
 
     emit fontDataChanged();
+    setBusyMessage("");
 }
 
 void BDatabaseLoader::download()
 {
-    qDebug() << "Download";
+    setBusyMessage("Downloading");
     QWebEnginePage *tPage = new QWebEnginePage;
     tPage->settings()->setAttribute(QWebEngineSettings::AutoLoadImages, false);
     tPage->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, false);

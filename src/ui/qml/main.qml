@@ -140,7 +140,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         root.iconId = model.modelData.id
-                        iconSelector.opacity = 1
+                        iconSelector.show()
                     }
                 }
             }

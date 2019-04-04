@@ -1,2 +1,3 @@
 build-desktop
 *.user
+/setup_output

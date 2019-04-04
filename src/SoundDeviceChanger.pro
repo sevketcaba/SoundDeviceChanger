@@ -11,27 +11,30 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = SoundDeviceChanger
 TEMPLATE = app
 
+include($$PWD/appinfo.pri)
 
 SOURCES += main.cpp\
         bcontroller.cpp \
     bdeviceinfo.cpp \
     bdevicemanager.cpp \
-    bsettings.cpp \
     awesome/qtawesome.cpp \
     awesome/qtawesomeanim.cpp \
     bdevicewatcher.cpp \
-    bdatabaseloader.cpp
+    bdatabaseloader.cpp \
+    bsettingswindow.cpp \
+    bsettings.cpp
 
 HEADERS  += bcontroller.h \
     bdeviceinfo.h \
     bdevicemanager.h \
     bdefinitions.h \
-    bsettings.h \
     awesome/qtawesome.h \
     awesome/qtawesomeanim.h \
     bdevicewatcher.h \
     ipolicyconfig.h \
-    bdatabaseloader.h
+    bdatabaseloader.h \
+    bsettingswindow.h \
+    bsettings.h
 
 LIBS += -lole32
 

@@ -1,7 +1,7 @@
 #include "bcontroller.h"
 #include "bdeviceinfo.h"
 #include "bdevicemanager.h"
-#include "bsettings.h"
+#include "bsettingswindow.h"
 
 #include <QApplication>
 #include <QDir>
@@ -96,7 +96,7 @@ void BController::menuClicked()
         qApp->quit();
     else if(!tAction->objectName().compare("[settings]"))
     {
-        BSettings *tSettings = new BSettings;
+        BSettingsWindow *tSettings = new BSettingsWindow;
         tSettings->show();
     }
     else

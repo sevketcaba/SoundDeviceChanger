@@ -50,12 +50,15 @@ class BDatabaseLoader : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<BFontData> fontData READ fontData NOTIFY fontDataChanged)
+    Q_PROPERTY(QString busyMessage READ busyMessage WRITE setBusyMessage NOTIFY busyMessageChanged)
 public:
     explicit BDatabaseLoader(QObject *parent = nullptr);
 
     QQmlListProperty<BFontData> fontData();
+    QString busyMessage();
 signals:
     void fontDataChanged();
+    void busyMessageChanged();
 public slots:
     void reload();
     void load();
@@ -64,6 +67,7 @@ protected slots:
     void download();
     void save(const QString &pHtml);
 
+    void setBusyMessage(QString pBusyMessage);
 protected:
     struct Data
     {
@@ -74,6 +78,7 @@ protected:
 
     bool mDownload;
     QList<BFontData*> mFontData;
+    QString mBusyMessage;
 };
 
 #endif // BDATABASELOADER_H
