@@ -13,7 +13,8 @@ class BDeviceInfo : public QObject
     Q_PROPERTY(bool isHidden READ isHidden WRITE setIsHidden NOTIFY isHiddenChanged)
 
 public:
-    BDeviceInfo(QObject *parent = 0);
+    explicit BDeviceInfo(QObject *parent = nullptr);
+
     bool isActive() const;
     QString id() const;
     QString name() const;

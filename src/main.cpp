@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     a.setApplicationName("SoundDeviceChanger");
     a.setOrganizationName("CABASoft");
     a.setOrganizationDomain("caba.gen.tr");
-    a.setApplicationVersion("v1.0");
+    a.setApplicationVersion("v1.1");
 
     a.setQuitOnLastWindowClosed(false);
 

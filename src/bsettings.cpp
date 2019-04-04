@@ -1,3 +1,4 @@
+#include "bdatabaseloader.h"
 #include "bdeviceinfo.h"
 #include "bdevicemanager.h"
 #include "bsettings.h"
@@ -12,15 +13,21 @@ BSettings::BSettings(QWidget *parent) :
     setWindowModality(Qt::ApplicationModal);
     setAttribute(Qt::WA_DeleteOnClose, true);
     setResizeMode(SizeRootObjectToView);
-    qmlRegisterType<BSettings>("tr.gen.caba.android.qt.qmltypes", 1, 0, "Settings");
-    qmlRegisterType<BDeviceInfo>(); //"tr.gen.caba.android.qt.qmltypes", 1, 0, "DeviceManager");
-    qmlRegisterType<BDeviceManager>(); //"tr.gen.caba.android.qt.qmltypes", 1, 0, "DeviceManager");
+    qmlRegisterType<BSettings>();
+    qmlRegisterType<BDeviceInfo>();
+    qmlRegisterType<BDeviceManager>();
+    qmlRegisterType<BFontData>();
+    qmlRegisterType<BDatabaseLoader>();
+
+    mFontDatabase = new BDatabaseLoader;
+    mFontDatabase->load();
 
     QDir tDir;
     setAppliationDir(tDir.absolutePath());
 
     rootContext()->setContextProperty("settings", this);
     rootContext()->setContextProperty("deviceManager", BDeviceManager::instance());
+    rootContext()->setContextProperty("fontDatabase", mFontDatabase);
     setSource(QUrl(QStringLiteral("qrc:/ui/qml/main.qml")));
 }
 

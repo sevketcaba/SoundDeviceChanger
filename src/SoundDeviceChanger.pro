@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui quick quickwidgets
+QT       += core gui quick quickwidgets webengine webenginewidgets xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     bsettings.cpp \
     awesome/qtawesome.cpp \
     awesome/qtawesomeanim.cpp \
-    bdevicewatcher.cpp
+    bdevicewatcher.cpp \
+    bdatabaseloader.cpp
 
 HEADERS  += bcontroller.h \
     bdeviceinfo.h \
@@ -29,7 +30,8 @@ HEADERS  += bcontroller.h \
     awesome/qtawesome.h \
     awesome/qtawesomeanim.h \
     bdevicewatcher.h \
-    ipolicyconfig.h
+    ipolicyconfig.h \
+    bdatabaseloader.h
 
 LIBS += -lole32
 

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Window 2.0
+import "../js/fontawesome.js" as FontAw
 import "../js/fontawesomearray.js" as FontA
 
 Rectangle {
@@ -155,20 +156,36 @@ Rectangle {
                 border.color: "gray"
                 clip: true
 
-                Rectangle {
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: height
-                    radius: width
-                    anchors.margins: 6*Screen.pixelDensity
-                    color: "white"
-                    opacity: model.modelData.isHidden ? 0 : 1
-                    visible: opacity > 0
-                    Behavior on opacity {
-                        NumberAnimation { duration: 200 }
-                    }
+
+                Text {
+                    id: iconVisible
+                    anchors.fill: parent
+                    //                    anchors.left: parent.left
+                    //                    anchors.top: parent.top
+                    //                    anchors.bottom: parent.bottom
+                    //                    width: height
+                    text: model.modelData.isHidden ? "\uf070" : "\uf06e"
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+                    color: model.modelData.isActive ? "white" : "gray"
+                    font.family: "FontAwesome"
+                    font.pointSize: 18
                 }
+
+//                Rectangle {
+//                    anchors.left: parent.left
+//                    anchors.top: parent.top
+//                    anchors.bottom: parent.bottom
+//                    width: height
+//                    radius: width
+//                    anchors.margins: 6*Screen.pixelDensity
+//                    color: "white"
+//                    opacity: model.modelData.isHidden ? 0 : 1
+//                    visible: opacity > 0
+//                    Behavior on opacity {
+//                        NumberAnimation { duration: 200 }
+//                    }
+//                }
 
                 MouseArea {
                     anchors.fill: parent
@@ -195,6 +212,14 @@ Rectangle {
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                MouseArea {
+                    anchors.fill: parent
+                    enabled: !model.modelData.isHidden
+                    onDoubleClicked: {
+                        deviceManager.setDeviceActive(model.modelData.id)
+                    }
+                }
             }
         }
     }
@@ -223,4 +248,5 @@ Rectangle {
         name: "FontAwesome"
         source: "qrc:/ui/font/fontawesome-webfont.ttf"
     }
+
 }

@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QDebug>
 
-#include <awesome/QtAwesome.h>
+#include "awesome/qtawesome.h"
 #include "bdefinitions.h"
 
 BController::BController(QObject *parent)
@@ -19,6 +19,7 @@ BController::BController(QObject *parent)
     createMenu();
 
     connect(BDeviceManager::instance(), &BDeviceManager::defaultChanged, this, &BController::defaultChanged);
+    connect(BDeviceManager::instance(), &BDeviceManager::defaultIconChanged, this, &BController::defaultChanged);
 
     mFont = new QtAwesome(qApp);
     mFont->initFontAwesome();
@@ -88,7 +89,9 @@ void BController::clearMenu()
 
 void BController::menuClicked()
 {
-    QAction *tAction = (QAction*)sender();
+    QAction *tAction = dynamic_cast<QAction*>(sender());
+    if(!tAction)
+        return;
     if(!tAction->objectName().compare("[exit]"))
         qApp->quit();
     else if(!tAction->objectName().compare("[settings]"))
@@ -108,7 +111,7 @@ void BController::defaultChanged()
     tOptions.insert( "color" , QColor(0,255,0) );
 
     BDeviceInfo *tInfo = BDeviceManager::instance()->defaultDevice();
-    QIcon tIcon = mFont->icon(fa::star, tOptions);
+    QIcon tIcon = mFont->icon(fa::question, tOptions);
 
     if(tInfo)
     {
@@ -118,8 +121,7 @@ void BController::defaultChanged()
             QString tIconName = tInfo->icon();
             if(tIconName.size() == 1)
             {
-                bool tOk;
-                int tCh = tIconName.toInt(&tOk, 16);
+                int tCh = tIconName.at(0).unicode();
                 tIcon = mFont->icon(tCh, tOptions);
             }
             else
@@ -135,4 +137,9 @@ void BController::defaultChanged()
 
     mTray->setIcon(tIcon);
 }
+
+//void BController::defaultIconChanged()
+//{
+
+//}
 

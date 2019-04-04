@@ -4,7 +4,7 @@
 
 #include <Windows.h>
 #include <mmdeviceapi.h>
-#include <Functiondiscoverykeys_devpkey.h>
+#include <functiondiscoverykeys_devpkey.h>
 
 #include "bdefinitions.h"
 #include "bdeviceinfo.h"
@@ -13,7 +13,7 @@
 
 BDeviceManager::BDeviceManager(QObject *parent) :
     QObject(parent)
-  , mDeviceWatcher(NULL)
+  , mDeviceWatcher(nullptr)
 {
     enumerateDevices();
 }
@@ -48,7 +48,7 @@ BDeviceInfo *BDeviceManager::defaultDevice()
         if(tInfo->isActive())
             return tInfo;
     }
-    return NULL;
+    return nullptr;
 }
 
 void BDeviceManager::setDeviceHidden(QString pDeviceId, bool pIsHidden)
@@ -65,6 +65,8 @@ void BDeviceManager::setDeviceIcon(QString pDeviceId, QString pIcon)
     if(!tInfo)
         return;
     tInfo->setIcon(pIcon);
+    if(tInfo->isActive())
+        emit defaultIconChanged();
 }
 
 void BDeviceManager::setDeviceActive(QString pDeviceId)
@@ -81,11 +83,11 @@ void BDeviceManager::setDeviceActive(QString pDeviceId)
             return;
 
         // do the trick here
-        PCWSTR tDevID = (const wchar_t*) pDeviceId.utf16();
-        IPolicyConfigVista *tPolicyConfig = NULL;
+        PCWSTR tDevID = reinterpret_cast<const wchar_t*>(pDeviceId.utf16());
+        IPolicyConfigVista *tPolicyConfig = nullptr;
         do
         {
-            HRESULT hr = CoCreateInstance(__uuidof(CPolicyConfigVistaClient), NULL, CLSCTX_ALL, __uuidof(IPolicyConfigVista), (LPVOID *)&tPolicyConfig);
+            HRESULT hr = CoCreateInstance(__uuidof(CPolicyConfigVistaClient), nullptr, CLSCTX_ALL, __uuidof(IPolicyConfigVista), reinterpret_cast<LPVOID *>(&tPolicyConfig));
             BREAK(hr);
             hr = tPolicyConfig->SetDefaultEndpoint(tDevID, eConsole);
         } while(false);
@@ -130,18 +132,19 @@ void BDeviceManager::setNextAsDefault()
 
 void BDeviceManager::enumerateDevices()
 {
-    IMMDeviceEnumerator *tEnumerator = NULL;
-    IMMDeviceCollection *tDevices = NULL;
+    IMMDeviceEnumerator *tEnumerator = nullptr;
+    IMMDeviceCollection *tDevices = nullptr;
     do
     {
         HRESULT hr = S_OK;
+        Q_UNUSED(hr)
 
         const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
         const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
         hr = CoCreateInstance(
-                    CLSID_MMDeviceEnumerator, NULL,
+                    CLSID_MMDeviceEnumerator, nullptr,
                     CLSCTX_ALL, IID_IMMDeviceEnumerator,
-                    (void**)&tEnumerator);
+                    reinterpret_cast<void**>(&tEnumerator));
         BREAK(hr);
 
         mDeviceWatcher = new BDeviceWatcher;
@@ -163,9 +166,8 @@ void BDeviceManager::enumerateDevices()
         BREAK(hr);
 
         QString tDefaultDeviceId;
-
-        IMMDevice *tDefDevice = NULL;
-        LPWSTR tDefDeviceId = NULL;
+        IMMDevice *tDefDevice = nullptr;
+        LPWSTR tDefDeviceId = nullptr;
         do
         {
             hr = tEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &tDefDevice);
@@ -173,11 +175,10 @@ void BDeviceManager::enumerateDevices()
             hr = tDefDevice->GetId(&tDefDeviceId);
             BREAK(hr);
             tDefaultDeviceId = QString::fromWCharArray(tDefDeviceId);
-
         }
         while(false);
         CoTaskMemFree(tDefDeviceId);
-        tDefDeviceId = NULL;
+        tDefDeviceId = nullptr;
         SafeRelease(&tDefDevice);
 
         quint32 tDeviceCount = 0;
@@ -185,9 +186,9 @@ void BDeviceManager::enumerateDevices()
         BREAK(hr);
         for(quint32 i =0; i < tDeviceCount;++i)
         {
-            IMMDevice *tDevice = NULL;
-            LPWSTR tDeviceId = NULL;
-            IPropertyStore *tProps = NULL;
+            IMMDevice *tDevice = nullptr;
+            LPWSTR tDeviceId = nullptr;
+            IPropertyStore *tProps = nullptr;
             PROPVARIANT tDeviceName;
             PropVariantInit(&tDeviceName);
             do
@@ -214,7 +215,7 @@ void BDeviceManager::enumerateDevices()
             }
             while(false);
             CoTaskMemFree(tDeviceId);
-            tDeviceId = NULL;
+            tDeviceId = nullptr;
             PropVariantClear(&tDeviceName);
             SafeRelease(&tProps);
             SafeRelease(&tDevice);
@@ -245,5 +246,5 @@ BDeviceInfo *BDeviceManager::deviceById(QString pDeviceId)
         if(!tInfo->id().compare(pDeviceId))
             return tInfo;
     }
-    return NULL;
+    return nullptr;
 }

@@ -12,7 +12,7 @@ class BDeviceManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<BDeviceInfo> devices READ devices NOTIFY devicesChanged)
-    BDeviceManager(QObject *parent = 0);
+    BDeviceManager(QObject *parent = nullptr);
 public:
     static BDeviceManager *instance();
 
@@ -23,6 +23,7 @@ public:
 signals:
     void devicesChanged();
     void defaultChanged();
+    void defaultIconChanged();
 public slots:
     void setDeviceHidden(QString pDeviceId,bool pIsHidden);
     void setDeviceIcon(QString pDeviceId, QString pIcon);

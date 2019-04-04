@@ -3,6 +3,8 @@
 
 #include <QQuickWidget>
 
+class BDatabaseLoader;
+
 class BSettings : public QQuickWidget
 {
     Q_OBJECT
@@ -10,7 +12,7 @@ class BSettings : public QQuickWidget
     QString mAppliationDir;
 
 public:
-    explicit BSettings(QWidget *parent = 0);
+    explicit BSettings(QWidget *parent = nullptr);
 
     QString appliationDir() const;
 
@@ -21,7 +23,7 @@ public slots:
     void setAppliationDir(QString appliationDir);
 
 protected:
-
+    BDatabaseLoader *mFontDatabase;
 };
 
 #endif // BSETTINGS_H

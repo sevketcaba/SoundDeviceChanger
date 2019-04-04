@@ -12,14 +12,16 @@ class BController : public QObject
     Q_OBJECT
 
 public:
-    BController(QObject *parent = 0);
+    explicit BController(QObject *parent = nullptr);
     ~BController();
+
 protected slots:
     void createMenu();
     void clearMenu();
     void menuClicked();
 
     void defaultChanged();
+//    void defaultIconChanged();
 protected:
     QSystemTrayIcon *mTray;
     QMenu *mMenu;
