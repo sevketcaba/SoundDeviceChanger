@@ -1,7 +1,8 @@
 #include "bsettings.h"
 
-BSettings::BSettings() :
-    QSettings("settings.ini", IniFormat)
-{
+#include <QStandardPaths>
 
+BSettings::BSettings() :
+    QSettings(QString("%1/settings.ini").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)), IniFormat)
+{
 }

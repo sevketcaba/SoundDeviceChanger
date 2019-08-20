@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SoundDeviceChanger"
-#define MyAppVersion "1.2"
+#define MyAppVersion "1.3"
 #define MyAppPublisher "CABASoft"
 #define MyAppURL "https://github.com/sevketcaba/SoundDeviceChanger"
 #define MyAppExeName "SoundDeviceChanger.exe"

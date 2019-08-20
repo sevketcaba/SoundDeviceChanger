@@ -14,7 +14,7 @@ FontAwesome @ https://fontawesome.com/v4.7.0/license/
 
 # Latest Release 
 
-- **v1.2**
+- **v1.3**
 
 Built with (x64)
 - Qt 5.12.0

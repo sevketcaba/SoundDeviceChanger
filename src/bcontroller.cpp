@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QDebug>
+#include <QProcess>
 
 #include "awesome/qtawesome.h"
 #include "bdefinitions.h"
@@ -70,6 +71,11 @@ void BController::createMenu()
         QAction *tAction = mMenu->addAction("Settings", this, SLOT(menuClicked()));
         tAction->setObjectName("[settings]");
     }
+
+    {
+        QAction *tAction = mMenu->addAction("Restart", this, SLOT(menuClicked()));
+        tAction->setObjectName("[restart]");
+    }
     {
         QAction *tAction = mMenu->addAction("Exit", this, SLOT(menuClicked()));
         tAction->setObjectName("[exit]");
@@ -94,6 +100,12 @@ void BController::menuClicked()
         return;
     if(!tAction->objectName().compare("[exit]"))
         qApp->quit();
+    else if(!tAction->objectName().compare("[restart]"))
+    {
+        QProcess tProcess;
+        tProcess.startDetached(qApp->applicationFilePath());
+        qApp->quit();
+    }
     else if(!tAction->objectName().compare("[settings]"))
     {
         BSettingsWindow *tSettings = new BSettingsWindow;

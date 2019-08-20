@@ -7,9 +7,12 @@
 #include <QFileDialog>
 #include <QQmlContext>
 
+#include "version.h"
+
 BSettingsWindow::BSettingsWindow(QWidget *parent) :
     QQuickWidget(parent)
 {
+    setWindowTitle(QString("%1 v%2").arg(VER_FILEDESCRIPTION_STR).arg(VER_FILEVERSION_STR));
     setWindowModality(Qt::ApplicationModal);
     setAttribute(Qt::WA_DeleteOnClose, true);
     setResizeMode(SizeRootObjectToView);
