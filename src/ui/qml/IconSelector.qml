@@ -150,7 +150,7 @@ Rectangle {
         opacity: busyRect.visible ? .4 : 1
         enabled: !busyRect.visible
 
-        ListView {
+        CustomListView {
             anchors.fill: parent
             delegate: Rectangle {
                 anchors.left: parent.left

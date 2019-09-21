@@ -14,6 +14,7 @@ public:
     ~BDeviceWatcher();
 signals:
     void defaultDeviceChanged(QString);
+    void devicesChanged();
 protected:
     LONG _cRef;
     IMMDeviceEnumerator *_pEnumerator;

@@ -19,6 +19,7 @@ BController::BController(QObject *parent)
     mMenu = new QMenu;
     createMenu();
 
+    connect(BDeviceManager::instance(), &BDeviceManager::devicesChanged, this, &BController::createMenu);
     connect(BDeviceManager::instance(), &BDeviceManager::defaultChanged, this, &BController::defaultChanged);
     connect(BDeviceManager::instance(), &BDeviceManager::defaultIconChanged, this, &BController::defaultChanged);
 
@@ -149,9 +150,3 @@ void BController::defaultChanged()
 
     mTray->setIcon(tIcon);
 }
-
-//void BController::defaultIconChanged()
-//{
-
-//}
-

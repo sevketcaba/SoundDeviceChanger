@@ -71,12 +71,16 @@ HRESULT STDMETHODCALLTYPE BDeviceWatcher::OnDefaultDeviceChanged(
 HRESULT STDMETHODCALLTYPE BDeviceWatcher::OnDeviceAdded(LPCWSTR pwstrDeviceId)
 {
     Q_UNUSED(pwstrDeviceId)
+    qDebug() << "Device Added" << QString::fromWCharArray(pwstrDeviceId);
+    emit devicesChanged();
     return S_OK;
 }
 
 HRESULT STDMETHODCALLTYPE BDeviceWatcher::OnDeviceRemoved(LPCWSTR pwstrDeviceId)
 {
     Q_UNUSED(pwstrDeviceId)
+    qDebug() << "Device Removed" << QString::fromWCharArray(pwstrDeviceId);
+    emit devicesChanged();
     return S_OK;
 }
 
@@ -86,6 +90,8 @@ HRESULT STDMETHODCALLTYPE BDeviceWatcher::OnDeviceStateChanged(
 {
     Q_UNUSED(pwstrDeviceId)
     Q_UNUSED(dwNewState)
+    qDebug() << "On Device State Changed" << QString::fromWCharArray(pwstrDeviceId) << dwNewState;
+    emit devicesChanged();
     return S_OK;
 }
 

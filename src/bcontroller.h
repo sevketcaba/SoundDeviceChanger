@@ -21,7 +21,6 @@ protected slots:
     void menuClicked();
 
     void defaultChanged();
-//    void defaultIconChanged();
 protected:
     QSystemTrayIcon *mTray;
     QMenu *mMenu;

@@ -5,5 +5,6 @@
         <file>ui/js/fontawesome.js</file>
         <file>ui/qml/IconSelector.qml</file>
         <file>ui/js/fontawesomearray.js</file>
+        <file>ui/qml/CustomListView.qml</file>
     </qresource>
 </RCC>

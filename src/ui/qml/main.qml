@@ -78,7 +78,7 @@ Rectangle {
         }
     }
 
-    ListView {
+    CustomListView {
         id: deviceList
         enabled: !iconSelector.visible
         anchors.top: topBar.bottom

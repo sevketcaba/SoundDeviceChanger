@@ -36,7 +36,7 @@ protected:
     int getVisibleDeviceCount();
 
     BDeviceInfo *deviceById(QString pId);
-private:
+protected slots:
     void enumerateDevices();
 };
 

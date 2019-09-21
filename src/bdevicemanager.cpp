@@ -137,7 +137,13 @@ void BDeviceManager::enumerateDevices()
     do
     {
         HRESULT hr = S_OK;
-        Q_UNUSED(hr)
+
+        while(mDevices.size())
+        {
+            BDeviceInfo *tInfo = mDevices.takeFirst();
+            emit devicesChanged();
+            tInfo->deleteLater();
+        }
 
         const CLSID CLSID_MMDeviceEnumerator = __uuidof(MMDeviceEnumerator);
         const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
@@ -147,20 +153,25 @@ void BDeviceManager::enumerateDevices()
                     reinterpret_cast<void**>(&tEnumerator));
         BREAK(hr);
 
-        mDeviceWatcher = new BDeviceWatcher;
-        connect(mDeviceWatcher, &BDeviceWatcher::defaultDeviceChanged, this, [=](QString pDeviceId){
-            BDeviceInfo *tOld = defaultDevice();
-            if(tOld)
-                tOld->setIsActive(false);
-            BDeviceInfo *tNew = deviceById(pDeviceId);
-            if(tNew)
-            {
-                tNew->setIsHidden(false);
-                tNew->setIsActive(true);
-            }
-            emit defaultChanged();
-        });
-        tEnumerator->RegisterEndpointNotificationCallback(mDeviceWatcher);
+        if(!mDeviceWatcher)
+        {
+            mDeviceWatcher = new BDeviceWatcher;
+            connect(mDeviceWatcher, &BDeviceWatcher::devicesChanged, this, &BDeviceManager::enumerateDevices, Qt::QueuedConnection);
+            connect(mDeviceWatcher, &BDeviceWatcher::defaultDeviceChanged, this, [=](QString pDeviceId){
+                BDeviceInfo *tOld = defaultDevice();
+                if(tOld)
+                    tOld->setIsActive(false);
+                BDeviceInfo *tNew = deviceById(pDeviceId);
+                if(tNew)
+                {
+                    tNew->setIsHidden(false);
+                    tNew->setIsActive(true);
+                }
+                emit defaultChanged();
+            });
+            HRESULT hr = tEnumerator->RegisterEndpointNotificationCallback(mDeviceWatcher);
+            BREAK(hr);
+        }
 
         hr = tEnumerator->EnumAudioEndpoints(eRender, DEVICE_STATE_ACTIVE, &tDevices);
         BREAK(hr);
